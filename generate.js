@@ -31,11 +31,14 @@ module.exports = function(docMapPromise, siteConfig){
 		return write.staticDist(siteConfig);
 	});
 
+	console.log( 'GONNA DO template promise' );
 	var buildTemplatesPromise = build.templates(siteConfig).then(function(){
+		console.log( 'DOING template promise' );
 		return Handlebars.create();
 	});
 	buildTemplatesPromise["catch"](function(){
 		console.log("problem building templates");
+		console.log( 'DID template promise' );
 	});
 
 	var currentDocObject;

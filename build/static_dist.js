@@ -70,6 +70,7 @@ module.exports = function(options){
 				// If we have already built, don't build again
 				if(exists && !options.forceBuild) {
 					builtAlready = true;
+					console.log ( 'INSIDE static_dist.js' );
 					if(options.debug) {
 						console.log("BUILD: Using cache",distFolder);
 					}

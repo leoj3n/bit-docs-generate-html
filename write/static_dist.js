@@ -22,6 +22,7 @@ var fss = require('../fs_extras.js'),
  * @return {Promise} A promise that resolves when successfully copied over.
  */
 module.exports = function(options){
+	console.log ('HEY HEY HEY');
 	var dest = path.join(options.dest,"static");
 	var distFolder =  path.join('site','static','dist', buildHash(options));
 	return mkdirs(dest).then(function(){
