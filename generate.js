@@ -27,19 +27,34 @@ module.exports = function(docMapPromise, siteConfig){
 	// 3. Runs site/static/build/build.js
 	//    A. Builds itself and copies everything to site/static/dist
 	var staticPromise = build.staticDist(siteConfig).then(function(){
+		console.log( 'staticPromise: COPIES statics' );
 		// copies statics to documentation location.
 		return write.staticDist(siteConfig);
 	});
 
+	debugger;
+
 	console.log( 'GONNA DO template promise' );
+
 	var buildTemplatesPromise = build.templates(siteConfig).then(function(){
+
 		console.log( 'DOING template promise' );
+
+		debugger;
+
 		return Handlebars.create();
 	});
+
+	debugger;
+
 	buildTemplatesPromise["catch"](function(){
+
+		debugger;
+
 		console.log("problem building templates");
-		console.log( 'DID template promise' );
 	});
+
+	console.log( 'DID template promise' );
 
 	var currentDocObject;
 	var getCurrent = function(){
@@ -49,11 +64,14 @@ module.exports = function(docMapPromise, siteConfig){
 		currentDocObject = current;
 	};
 	var helpersReadyPromise = docMapPromise.then(function(docMap){
+		debugger;
 		return build.helpers(buildTemplatesPromise, docMap, siteConfig, getCurrent);
 	});
 	var searchMapPromise = docMapPromise.then(function(docMap){
 		return write.searchMap(docMap, siteConfig);
 	});
+
+	debugger;
 
 	var docsPromise = Q.all([
 			docMapPromise,
@@ -62,6 +80,7 @@ module.exports = function(docMapPromise, siteConfig){
 			mkdirs(siteConfig.dest),
 			searchMapPromise
 	]).then(function(results){
+		console.log( 'docsPromise: WRITE docMAP' );
 		var docMap = results[0],
 			renderer = results[1];
 		return write.docMap(docMap, renderer, siteConfig, setCurrent);

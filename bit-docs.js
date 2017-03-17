@@ -24,6 +24,7 @@ module.exports = function(bitDocs){
         var html = siteConfig.html;
         _.assign(html.dependencies, htmlConfig.dependencies || {});
 
+				//debugger;
 				console.log ( 'ABOUT TO MERGE ONTO' );
 
         mergeOnto("static", html, htmlConfig);
