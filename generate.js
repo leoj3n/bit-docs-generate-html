@@ -85,5 +85,17 @@ module.exports = function(docMapPromise, siteConfig){
 			renderer = results[1];
 		return write.docMap(docMap, renderer, siteConfig, setCurrent);
 	});
-	return Q.all([staticPromise, docsPromise]);
+
+	// process static and doc files
+	return Q.all([staticPromise, docsPromise]).fail(function(err){
+		// attempt cleanup of temp files upon failure
+		return Q.Promise(function(resolve,reject){
+			Q.fcall(function(){
+				console.log(">>>>> ATTEMPTING CLEAN UP");
+				throw new Error(">>>>> ERROR WHILE TRYING TO CLEAN UP");
+			}).fail(function(err2){
+				reject(err2);
+			});
+		});
+	});
 };
