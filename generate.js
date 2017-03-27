@@ -93,19 +93,8 @@ module.exports = function(docMapPromise, siteConfig){
 		return Q.Promise(function(resolve,reject){
 			Q.fcall(function(){
 				var hash = buildHash(siteConfig);
-				// following fsx.exists is a temporary sanity check around rimraf...
-				return fsx.exists(path.join("site","templates",hash)).then(function(exists){
-					if(exists) {
-						return rmdir(path.join(__dirname,"site","*",hash)).then(function(){
-							console.log('DID REMOVE');
-						}, function(rmerr) {
-							throw rmerr;
-						});
-					} else {
-						console.log ( 'DOES NOT EXIST' );
-					}
-				}, function(exerr){
-					throw exerr;
+				return rmdir(path.join(__dirname,"site","*",hash)).then(function(){
+					console.log('DID REMOVE');
 				});
 			}).then(function(){
 				reject(err);
