@@ -1,9 +1,12 @@
-
 var build = require("./build/build"),
 	write = require("./write/write"),
 	Q = require("q"),
 	fs = require("fs-extra"),
 	mkdirs = Q.denodeify(fs.mkdirs),
+	buildHash = require("./build/build_hash"),
+	rmdir = Q.denodeify(require('rimraf')),
+	path = require('path'),
+	fsx = require('./fs_extras'),
 	Handlebars = require("handlebars");
 
 /**
@@ -86,15 +89,28 @@ module.exports = function(docMapPromise, siteConfig){
 		return write.docMap(docMap, renderer, siteConfig, setCurrent);
 	});
 
-	// process static and doc files
-	return Q.all([staticPromise, docsPromise]).fail(function(err){
-		// attempt cleanup of temp files upon failure
+	return Q.all([staticPromise, docsPromise]).catch(function(err){
 		return Q.Promise(function(resolve,reject){
 			Q.fcall(function(){
-				console.log(">>>>> ATTEMPTING CLEAN UP");
-				throw new Error(">>>>> ERROR WHILE TRYING TO CLEAN UP");
-			}).fail(function(err2){
-				reject(err2);
+				var hash = buildHash(siteConfig);
+				// following fsx.exists is a temporary sanity check around rimraf...
+				return fsx.exists(path.join("site","templates",hash)).then(function(exists){
+					if(exists) {
+						return rmdir(path.join(__dirname,"site","*",hash)).then(function(){
+							console.log('DID REMOVE');
+						}, function(rmerr) {
+							throw rmerr;
+						});
+					} else {
+						console.log ( 'DOES NOT EXIST' );
+					}
+				}, function(exerr){
+					throw exerr;
+				});
+			}).then(function(){
+				reject(err);
+			}, function(err2){
+				reject({ originalError: err, cleanupError: err2 });
 			});
 		});
 	});
