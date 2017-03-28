@@ -72,6 +72,7 @@ module.exports = function(siteConfig){
 			return fsx.exists(target).then(function(exists){
 				if(exists) {
 					console.log ( 'INSIDE templates.js' );
+					console.log ( '+++++++++++++++++++ about to reproduce issue#8 +++++++++++++++++++' );
 					if(siteConfig.debug) {
 						console.log("BUILD: Using cache",target);
 					}

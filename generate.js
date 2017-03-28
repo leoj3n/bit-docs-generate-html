@@ -35,7 +35,7 @@ module.exports = function(docMapPromise, siteConfig){
 		return write.staticDist(siteConfig);
 	});
 
-	debugger;
+	//debugger;
 
 	console.log( 'GONNA DO template promise' );
 
@@ -43,16 +43,16 @@ module.exports = function(docMapPromise, siteConfig){
 
 		console.log( 'DOING template promise' );
 
-		debugger;
+		//debugger;
 
 		return Handlebars.create();
 	});
 
-	debugger;
+	//debugger;
 
 	buildTemplatesPromise["catch"](function(){
 
-		debugger;
+		//debugger;
 
 		console.log("problem building templates");
 	});
@@ -67,14 +67,14 @@ module.exports = function(docMapPromise, siteConfig){
 		currentDocObject = current;
 	};
 	var helpersReadyPromise = docMapPromise.then(function(docMap){
-		debugger;
+		//debugger;
 		return build.helpers(buildTemplatesPromise, docMap, siteConfig, getCurrent);
 	});
 	var searchMapPromise = docMapPromise.then(function(docMap){
 		return write.searchMap(docMap, siteConfig);
 	});
 
-	debugger;
+	//debugger;
 
 	var docsPromise = Q.all([
 			docMapPromise,
@@ -93,7 +93,9 @@ module.exports = function(docMapPromise, siteConfig){
 		return Q.Promise(function(resolve,reject){
 			Q.fcall(function(){
 				var hash = buildHash(siteConfig);
+				debugger;
 				return rmdir(path.join(__dirname,"site","*",hash)).then(function(){
+					// this is never reached :unamused:
 					console.log('DID REMOVE');
 				});
 			}).then(function(){

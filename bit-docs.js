@@ -8,6 +8,8 @@ var mergeOnto = function(prop, dest, source){
     }
 };
 
+console.log ( '---------------------------------------------------------------------------' );
+
 module.exports = function(bitDocs){
     bitDocs.register("generator", generator);
 
